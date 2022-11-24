@@ -4,18 +4,21 @@ const app = express();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion } = require("mongodb");
 require("dotenv").config();
+const cors = require("cors");
 
+app.use(cors());
+app.use(express.json());
 const uri = `mongodb+srv://${process.env.NAME}:${process.env.PASSWORD}@cluster0.hjhvnge.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-const AllCollection = client.db("Shop").collection("AllCategorised");
-const items = client.db("Shop").collection("Items");
 
 async function run() {
   try {
+    const AllCollection = client.db("Shop").collection("AllCategorised");
+    const items = client.db("Shop").collection("Items");
     app.get("/", async (req, res) => {
       const query = {};
       const result = await AllCollection.find(query).toArray();
