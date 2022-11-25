@@ -44,6 +44,13 @@ async function run() {
       const result = await MyProducts.insertOne(query);
       res.send(result);
     });
+
+    app.get("/MyProducts", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const result = await MyProducts.findOne(query);
+      res.send(result);
+    });
   } catch {
     (error) => console.log(error);
   }
