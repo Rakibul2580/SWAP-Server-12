@@ -16,9 +16,10 @@ const client = new MongoClient(uri, {
 });
 
 async function run() {
+  const AllCollection = client.db("Shop").collection("AllCategorised");
+  const items = client.db("Shop").collection("Items");
+  const MyProducts = client.db("Shop").collection("MyProducts");
   try {
-    const AllCollection = client.db("Shop").collection("AllCategorised");
-    const items = client.db("Shop").collection("Items");
     app.get("/", async (req, res) => {
       const query = {};
       const result = await AllCollection.find(query).toArray();
@@ -35,6 +36,12 @@ async function run() {
       const id = req.params.id;
       const query = { category_id: id };
       const result = await AllCollection.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post("/MyProducts", async (req, res) => {
+      const query = req.body;
+      const result = await MyProducts.insertOne(query);
       res.send(result);
     });
   } catch {
