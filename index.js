@@ -48,7 +48,8 @@ async function run() {
     app.get("/MyProducts", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
-      const result = await MyProducts.findOne(query);
+      query.date = new Date();
+      const result = await MyProducts.find(query).toArray();
       res.send(result);
     });
   } catch {
