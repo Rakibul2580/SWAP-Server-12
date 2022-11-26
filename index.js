@@ -33,6 +33,13 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/payment/id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await AllCollection.findOne(query);
+      res.send(result);
+    });
+
     app.post("/MyProducts", async (req, res) => {
       const query = req.body;
       query.date = new Date();
@@ -48,6 +55,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await MyProducts.findOne(query);
+      res.send(result);
+    });
     app.delete("/MyProducts/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
