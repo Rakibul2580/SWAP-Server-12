@@ -14,7 +14,7 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-// .skip(+page * size)
+// .skip(35)
 async function run() {
   const AllCollection = client.db("Shop").collection("AllCategorised");
   const items = client.db("Shop").collection("Items");
@@ -31,6 +31,18 @@ async function run() {
       const query = req.body;
       query.date = new Date();
       const result = await AllCollection.insertOne(query);
+      res.send(result);
+    });
+    app.put("/AllCollection/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const update = req.body.add;
+      const updatedDoc = {
+        $set: {
+          add: update,
+        },
+      };
+      const result = await AllCollection.updateOne(query, updatedDoc);
       res.send(result);
     });
 
