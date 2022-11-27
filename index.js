@@ -14,11 +14,12 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-
+// .skip(+page * size)
 async function run() {
   const AllCollection = client.db("Shop").collection("AllCategorised");
   const items = client.db("Shop").collection("Items");
   const MyProducts = client.db("Shop").collection("MyProducts");
+  const users = client.db("Shop").collection("users");
   try {
     app.get("/items", async (req, res) => {
       const query = {};
@@ -26,6 +27,19 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/AllCollection", async (req, res) => {
+      const query = req.body;
+      query.date = new Date();
+      const result = await AllCollection.insertOne(query);
+      res.send(result);
+    });
+
+    app.get("/addProducts/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await AllCollection.find(query).toArray();
+      res.send(result);
+    });
     app.get("/category/:id", async (req, res) => {
       const id = req.params.id;
       const query = { category_id: id };
@@ -65,6 +79,19 @@ async function run() {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const result = await MyProducts.deleteOne(query);
+      res.send(result);
+    });
+
+    app.post("/users", async (req, res) => {
+      const user = req.body;
+      const result = await users.insertOne(user);
+      res.send(result);
+    });
+
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await users.findOne(query);
       res.send(result);
     });
   } catch {
