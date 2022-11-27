@@ -27,6 +27,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/", async (req, res) => {
+      const query = {};
+      const result = await AllCollection.find(query).skip(35).toArray();
+      res.send(result);
+    });
+
     app.post("/AllCollection", async (req, res) => {
       const query = req.body;
       query.date = new Date();
