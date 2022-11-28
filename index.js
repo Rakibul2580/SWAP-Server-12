@@ -29,7 +29,7 @@ async function run() {
 
     app.get("/Advertisement", async (req, res) => {
       const query = {};
-      const result = await AllCollection.find(query).skip(35).toArray();
+      const result = await AllCollection.find(query).skip(33).toArray();
       res.send(result);
     });
 
