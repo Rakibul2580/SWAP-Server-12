@@ -21,13 +21,13 @@ async function run() {
   const MyProducts = client.db("Shop").collection("MyProducts");
   const users = client.db("Shop").collection("users");
   try {
-    app.get("/items", async (req, res) => {
+    app.get("/", async (req, res) => {
       const query = {};
       const result = await items.find(query).toArray();
       res.send(result);
     });
 
-    app.get("/", async (req, res) => {
+    app.get("/Advertisement", async (req, res) => {
       const query = {};
       const result = await AllCollection.find(query).skip(35).toArray();
       res.send(result);
@@ -105,7 +105,29 @@ async function run() {
       const result = await users.insertOne(user);
       res.send(result);
     });
-
+    app.get("/users", async (req, res) => {
+      const query = {};
+      const result = await users.find(query).toArray();
+      res.send(result);
+    });
+    app.delete("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await users.deleteOne(query);
+      res.send(result);
+    });
+    app.put("/seller/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { seller_name: id };
+      const update = req.body.seller_verified;
+      const updatedDoc = {
+        $set: {
+          seller_verified: update,
+        },
+      };
+      const result = await AllCollection.updateMany(query, updatedDoc);
+      res.send(result);
+    });
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
